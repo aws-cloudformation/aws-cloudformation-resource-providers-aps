@@ -1,0 +1,9 @@
+{
+  "Alias": "SpaceMonkey",
+  "Tags": [
+    {
+      "Key": "FavoriteFood",
+      "Value": "Cheese"
+    }
+  ]
+}
