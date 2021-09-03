@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+._*
+
+# our logs
+rpdk.log*
+
+#generated files
+cmd/main.go
+cmd/resource/model.go
+docs/
+makebuild
+
+#compiled file
+bin/
+
+#vender
+vender/
+
+# contains credentials
+sam-tests/

@@ -1,0 +1,49 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+      golang: 1.13
+    commands:
+      - pip install -U 'six~=1.15'
+      - pip install -U 'pyyaml~=5.4'
+      - pip install -U pre-commit cloudformation-cli-go-plugin
+  build:
+    commands:
+      - pre-commit run --all-files
+      - |
+        if [ "$(ls -A $CODEBUILD_SRC_DIR)" ]; then
+          cd $CODEBUILD_SRC_DIR
+
+          for directory in aws-aps-workspace; do
+            cd "$directory"
+
+            cfn generate
+            if [ "$?" -ne 0 ] ; then
+                echo "cfn generate failed!"
+                exit 1
+            fi
+
+            go get ./...
+            if [ "$?" -ne 0 ] ; then
+                echo "go get failed!"
+                exit 1
+            fi
+
+            go test ./...
+            if [ "$?" -ne 0 ] ; then
+                echo "go test failed!"
+                exit 1
+            fi
+            make -f makebuild build
+
+            if [ "$?" -ne 0 ] ; then
+                echo "go build failed!"
+                exit 1
+            fi
+
+            cd ..
+          done
+        else
+          echo "$CODEBUILD_SRC_DIR is empty"
+        fi
