@@ -33,6 +33,7 @@ func Create(req handler.Request, prevModel *Model, currentModel *Model) (handler
 
 	resp, err := client.CreateWorkspace(&prometheusservice.CreateWorkspaceInput{
 		Alias: currentModel.Alias,
+		Tags:  tagsToStringMap(currentModel.Tags),
 	})
 	if err != nil {
 		return internal.NewFailedEvent(err)
@@ -107,6 +108,27 @@ func Update(req handler.Request, prevModel *Model, currentModel *Model) (handler
 				WorkspaceId: aws.String(workspaceID),
 				Alias:       currentModel.Alias,
 			})
+		if err != nil {
+			return internal.NewFailedEvent(err)
+		}
+	}
+
+	toAdd, toRemove := internal.StringMapDifference(tagsToStringMap(currentModel.Tags), tagsToStringMap(prevModel.Tags))
+	if len(toRemove) > 0 {
+		_, err = client.UntagResource(&prometheusservice.UntagResourceInput{
+			ResourceArn: currentModel.Arn,
+			TagKeys:     toRemove,
+		})
+		if err != nil {
+			return internal.NewFailedEvent(err)
+		}
+	}
+
+	if len(toAdd) > 0 {
+		_, err = client.TagResource(&prometheusservice.TagResourceInput{
+			ResourceArn: currentModel.Arn,
+			Tags:        toAdd,
+		})
 		if err != nil {
 			return internal.NewFailedEvent(err)
 		}
@@ -215,6 +237,7 @@ func List(req handler.Request, prevModel *Model, currentModel *Model) (handler.P
 			WorkspaceId: ws.WorkspaceId,
 			Alias:       ws.Alias,
 			Arn:         ws.Arn,
+			Tags:        stringMapToTags(ws.Tags),
 		})
 	}
 
@@ -247,6 +270,7 @@ func readWorkspace(client *prometheusservice.PrometheusService, currentModel *Mo
 	currentModel.Arn = data.Workspace.Arn
 	currentModel.PrometheusEndpoint = data.Workspace.PrometheusEndpoint
 	currentModel.Alias = data.Workspace.Alias
+	currentModel.Tags = stringMapToTags(data.Workspace.Tags)
 	return data.Workspace.Status, nil
 }
 
@@ -279,4 +303,23 @@ func buildCallbackContext(model *Model) map[string]interface{} {
 	return map[string]interface{}{
 		"Arn": aws.StringValue(model.Arn),
 	}
+}
+
+func stringMapToTags(m map[string]*string) []Tag {
+	res := []Tag{}
+	for key, val := range m {
+		res = append(res, Tag{
+			Key:   aws.String(key),
+			Value: val,
+		})
+	}
+	return res
+}
+
+func tagsToStringMap(tags []Tag) map[string]*string {
+	result := map[string]*string{}
+	for _, tag := range tags {
+		result[aws.StringValue(tag.Key)] = tag.Value
+	}
+	return result
 }
