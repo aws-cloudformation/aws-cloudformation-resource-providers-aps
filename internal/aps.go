@@ -11,8 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/arn"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudformation"
+
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/prometheusservice"
 )
 
@@ -92,6 +93,7 @@ func NewFailedEvent(err error) (handler.ProgressEvent, error) {
 var (
 	supportedResourceTypes = map[string]struct{}{
 		"workspace":           {},
+		"rulegroupsnamespace": {},
 	}
 )
 
@@ -111,7 +113,15 @@ func ParseARN(value string) (*arn.ARN, string, error) {
 	return &v, resourceID, nil
 }
 
-func NewAMP(sess *session.Session) *prometheusservice.PrometheusService {
+type APSService interface {
+	DescribeWorkspace(input *prometheusservice.DescribeWorkspaceInput) (*prometheusservice.DescribeWorkspaceOutput, error)
+	DescribeAlertManagerDefinition(input *prometheusservice.DescribeAlertManagerDefinitionInput) (*prometheusservice.DescribeAlertManagerDefinitionOutput, error)
+	CreateAlertManagerDefinition(input *prometheusservice.CreateAlertManagerDefinitionInput) (*prometheusservice.CreateAlertManagerDefinitionOutput, error)
+	DeleteAlertManagerDefinition(input *prometheusservice.DeleteAlertManagerDefinitionInput) (*prometheusservice.DeleteAlertManagerDefinitionOutput, error)
+	PutAlertManagerDefinition(input *prometheusservice.PutAlertManagerDefinitionInput) (*prometheusservice.PutAlertManagerDefinitionOutput, error)
+}
+
+func NewAPS(sess *session.Session) *prometheusservice.PrometheusService {
 	sess.Handlers.Complete.PushBack(func(r *request.Request) {
 		// Only consider requests with responses that have 5XX status codes
 		if r.HTTPResponse != nil && r.HTTPResponse.StatusCode < 500 {
