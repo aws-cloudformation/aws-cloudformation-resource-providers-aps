@@ -1,6 +1,5 @@
 {
-    "Workspace": "{{AlertManagerDefinitionTestWorkspaceArn}}",
-    "Name": "CustomerObsession",
-    "Data": ""
+  "Workspace": "{{AlertManagerDefinitionTestWorkspaceArn}}",
+  "Name": "CustomerObsession",
+  "Data": ""
 }
-
