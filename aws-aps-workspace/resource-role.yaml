@@ -23,10 +23,17 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                - "aps:CreateAlertManagerDefinition"
                 - "aps:CreateWorkspace"
+                - "aps:DeleteAlertManagerDefinition"
                 - "aps:DeleteWorkspace"
+                - "aps:DescribeAlertManagerDefinition"
                 - "aps:DescribeWorkspace"
+                - "aps:ListTagsForResource"
                 - "aps:ListWorkspaces"
+                - "aps:PutAlertManagerDefinition"
+                - "aps:TagResource"
+                - "aps:UntagResource"
                 - "aps:UpdateWorkspaceAlias"
                 Resource: "*"
 Outputs:
