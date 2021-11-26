@@ -1,0 +1,4 @@
+{
+  "Alias": "SpaceMonkey",
+  "AlertManagerDefinition": "alertmanager_config: |\n  templates:\n    - 'default_template'\n  route:\n    receiver: example-sns\n  receivers:\n    - name: example-sns\n      sns_configs:\n      - topic_arn: {{AlertManagerTestSNSExport}}"
+}
