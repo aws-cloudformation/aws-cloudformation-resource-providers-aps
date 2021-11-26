@@ -1,0 +1,11 @@
+{
+  "Workspace": "{{AlertManagerDefinitionTestWorkspaceArn}}",
+  "Name": "CustomerObsession",
+  "Data": "groups:\n  - name: amazing\n    interval: 1m\n    rules:\n    - alert: foo\n      expr: job:request_latency_seconds:mean5m{job=\"myjob\"} > 0.5\n      for: 10m\n      labels:\n        severity: page\n      annotations:\n        summary: High request latency\n",
+  "Tags": [
+    {
+      "Key": "FavoriteFood",
+      "Value": "Cheese"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "Workspace": "{{AlertManagerDefinitionTestWorkspaceArn}}",
+  "Name": "CustomerObsession",
+  "Data": ""
+}
