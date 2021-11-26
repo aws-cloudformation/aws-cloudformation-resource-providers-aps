@@ -16,7 +16,7 @@ type MockPrometheusService struct {
 func (c *MockPrometheusService) DescribeWorkspace(*prometheusservice.DescribeWorkspaceInput) (*prometheusservice.DescribeWorkspaceOutput, error) {
 	return &prometheusservice.DescribeWorkspaceOutput{
 		Workspace: &prometheusservice.WorkspaceDescription{
-			Arn: aws.String("arn:aws:aps:us-west-2:933102010132:workspace/ws-5f41d54a-41fc-4783-984f-7facb35c928c"),
+			Arn: aws.String("arn:aws:aps:us-west-2:111111111111:workspace/ws-11111111-1111-1111-1111-111111111111"),
 		},
 	}, nil
 }
@@ -67,7 +67,7 @@ func Test_validateAlertManagerState(t *testing.T) {
 	}
 
 	m := &Model{
-		Arn: aws.String("arn:aws:aps:us-west-2:933102010132:workspace/ws-5f41d54a-41fc-4783-984f-7facb35c928c"),
+		Arn: aws.String("arn:aws:aps:us-west-2:111111111111:workspace/ws-11111111-1111-1111-1111-111111111111"),
 	}
 
 	for name, tc := range testCases {
