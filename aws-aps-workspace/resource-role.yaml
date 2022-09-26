@@ -24,16 +24,20 @@ Resources:
               - Effect: Allow
                 Action:
                 - "aps:CreateAlertManagerDefinition"
+                - "aps:CreateLoggingConfiguration"
                 - "aps:CreateWorkspace"
                 - "aps:DeleteAlertManagerDefinition"
+                - "aps:DeleteLoggingConfiguration"
                 - "aps:DeleteWorkspace"
                 - "aps:DescribeAlertManagerDefinition"
+                - "aps:DescribeLoggingConfiguration"
                 - "aps:DescribeWorkspace"
                 - "aps:ListTagsForResource"
                 - "aps:ListWorkspaces"
                 - "aps:PutAlertManagerDefinition"
                 - "aps:TagResource"
                 - "aps:UntagResource"
+                - "aps:UpdateLoggingConfiguration"
                 - "aps:UpdateWorkspaceAlias"
                 Resource: "*"
 Outputs:

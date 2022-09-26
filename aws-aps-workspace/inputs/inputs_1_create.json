@@ -1,3 +1,9 @@
 {
-  "Alias": "Monkey"
+  "Alias": "Monkey",
+  "Tags": [
+    {
+      "Key": "FavoriteDrink",
+      "Value": "Latte"
+    }
+  ]
 }

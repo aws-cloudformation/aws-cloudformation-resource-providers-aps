@@ -114,11 +114,19 @@ func ParseARN(value string) (*arn.ARN, string, error) {
 }
 
 type APSService interface {
+	CreateWorkspace(input *prometheusservice.CreateWorkspaceInput) (*prometheusservice.CreateWorkspaceOutput, error)
+	UpdateWorkspaceAlias(input *prometheusservice.UpdateWorkspaceAliasInput) (*prometheusservice.UpdateWorkspaceAliasOutput, error)
 	DescribeWorkspace(input *prometheusservice.DescribeWorkspaceInput) (*prometheusservice.DescribeWorkspaceOutput, error)
 	DescribeAlertManagerDefinition(input *prometheusservice.DescribeAlertManagerDefinitionInput) (*prometheusservice.DescribeAlertManagerDefinitionOutput, error)
 	CreateAlertManagerDefinition(input *prometheusservice.CreateAlertManagerDefinitionInput) (*prometheusservice.CreateAlertManagerDefinitionOutput, error)
 	DeleteAlertManagerDefinition(input *prometheusservice.DeleteAlertManagerDefinitionInput) (*prometheusservice.DeleteAlertManagerDefinitionOutput, error)
 	PutAlertManagerDefinition(input *prometheusservice.PutAlertManagerDefinitionInput) (*prometheusservice.PutAlertManagerDefinitionOutput, error)
+	CreateLoggingConfiguration(input *prometheusservice.CreateLoggingConfigurationInput) (*prometheusservice.CreateLoggingConfigurationOutput, error)
+	UpdateLoggingConfiguration(input *prometheusservice.UpdateLoggingConfigurationInput) (*prometheusservice.UpdateLoggingConfigurationOutput, error)
+	DeleteLoggingConfiguration(input *prometheusservice.DeleteLoggingConfigurationInput) (*prometheusservice.DeleteLoggingConfigurationOutput, error)
+	DescribeLoggingConfiguration(input *prometheusservice.DescribeLoggingConfigurationInput) (*prometheusservice.DescribeLoggingConfigurationOutput, error)
+	TagResource(input *prometheusservice.TagResourceInput) (*prometheusservice.TagResourceOutput, error)
+	UntagResource(input *prometheusservice.UntagResourceInput) (*prometheusservice.UntagResourceOutput, error)
 }
 
 func NewAPS(sess *session.Session) *prometheusservice.PrometheusService {
@@ -168,4 +176,18 @@ func StringMapDifference(current, previous map[string]*string) (toChange map[str
 	}
 
 	return
+}
+
+func MergeMaps(from, to map[string]*string) {
+	for key, val := range from {
+		to[key] = val
+	}
+}
+
+func ToAWSStringMap(fromMap map[string]string) map[string]*string {
+	result := make(map[string]*string)
+	for key, val := range fromMap {
+		result[key] = aws.String(val)
+	}
+	return result
 }

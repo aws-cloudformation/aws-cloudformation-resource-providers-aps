@@ -13,7 +13,7 @@ import (
 	"github.com/aws-cloudformation/cloudformation-cli-go-plugin/cfn/handler"
 )
 
-const defaultCallbackSeconds = 2
+const defaultCallbackSeconds = 10
 
 // Create handles the Create event from the Cloudformation service.
 func Create(req handler.Request, prevModel *Model, currentModel *Model) (handler.ProgressEvent, error) {
@@ -41,11 +41,15 @@ func Create(req handler.Request, prevModel *Model, currentModel *Model) (handler
 	if err != nil {
 		return internal.NewFailedEvent(err)
 	}
+	systemTags := internal.ToAWSStringMap(req.RequestContext.SystemTags)
+	tags := tagsToStringMap(currentModel.Tags)
+	internal.MergeMaps(systemTags, tags)
+
 	resp, err := client.CreateRuleGroupsNamespace(&prometheusservice.CreateRuleGroupsNamespaceInput{
 		WorkspaceId: aws.String(workspaceID),
 		Name:        currentModel.Name,
 		Data:        []byte(*currentModel.Data),
-		Tags:        tagsToStringMap(currentModel.Tags),
+		Tags:        tags,
 	})
 	if err != nil {
 		return internal.NewFailedEvent(err)
@@ -117,7 +121,12 @@ func Update(req handler.Request, prevModel *Model, currentModel *Model) (handler
 		}, nil
 	}
 
-	toAdd, toRemove := internal.StringMapDifference(tagsToStringMap(currentModel.Tags), tagsToStringMap(prevModel.Tags))
+	currentModelTags := tagsToStringMap(currentModel.Tags)
+	systemTags := internal.ToAWSStringMap(req.RequestContext.SystemTags)
+
+	internal.MergeMaps(systemTags, currentModelTags)
+
+	toAdd, toRemove := internal.StringMapDifference(currentModelTags, tagsToStringMap(prevModel.Tags))
 	if len(toRemove) > 0 {
 		_, err = client.UntagResource(&prometheusservice.UntagResourceInput{
 			ResourceArn: currentModel.Arn,
@@ -291,7 +300,7 @@ func buildCallbackContext(model *Model) map[string]interface{} {
 }
 
 func stringMapToTags(m map[string]*string) []Tag {
-	res := []Tag{}
+	res := make([]Tag, 0)
 	for key, val := range m {
 		res = append(res, Tag{
 			Key:   aws.String(key),
