@@ -78,7 +78,6 @@ func Test_SimpleWorkspaceCreate(t *testing.T) {
 						"aws:cloudformation:stack-id":   "arn:aws:cloudformation:us-west-2:123456789:stack/Test/fa4bdfd0-0498-11ed-a87d-06c24a5b766d",
 					},
 				},
-				Logger: nil,
 			},
 			prevModel: &Model{},
 			currentModel: &Model{
@@ -105,7 +104,6 @@ func Test_SimpleWorkspaceCreate(t *testing.T) {
 						"aws:cloudformation:stack-id":   "arn:aws:cloudformation:us-west-2:123456789012:stack/Test/fa4bdfd0-0498-11ed-a87d-06c24a5b766d",
 					},
 				},
-				Logger: nil,
 			},
 			prevModel: &Model{},
 			currentModel: &Model{

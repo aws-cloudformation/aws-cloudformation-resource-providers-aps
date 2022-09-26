@@ -7,7 +7,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/prometheusservice"
-	"log"
 	"strings"
 )
 
@@ -69,7 +68,7 @@ func UpdateAlertManager(req handler.Request, client internal.APSService, prevMod
 
 	if arn, ok := req.CallbackContext[waitForAlertManagerStatusDeleteKey]; ok {
 		currentModel.Arn = aws.String(arn.(string))
-		evt, err := validateAlertManagerDeleted(req.Logger, client,
+		evt, err := validateAlertManagerDeleted(client,
 			currentModel,
 			messageUpdateComplete)
 		return proceedOnSuccess(evt, err)
@@ -185,7 +184,7 @@ func validateAlertManagerState(client internal.APSService, currentModel *Model, 
 	}, nil
 }
 
-func validateAlertManagerDeleted(logger *log.Logger, client internal.APSService, currentModel *Model, successMessage string) (handler.ProgressEvent, error) {
+func validateAlertManagerDeleted(client internal.APSService, currentModel *Model, successMessage string) (handler.ProgressEvent, error) {
 	_, err := readWorkspace(client, currentModel)
 	if err != nil {
 		return handler.ProgressEvent{}, err
