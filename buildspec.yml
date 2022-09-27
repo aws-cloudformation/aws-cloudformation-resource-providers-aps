@@ -3,7 +3,7 @@ phases:
   install:
     runtime-versions:
       python: 3.7
-      golang: 1.13
+      golang: 1.16
     commands:
       - pip install -U 'six~=1.15'
       - pip install -U 'pyyaml~=5.4'

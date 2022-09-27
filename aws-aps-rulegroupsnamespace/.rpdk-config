@@ -14,6 +14,6 @@
         "artifact_type": null,
         "importpath": "github.com/aws-cloudformation/aws-cloudformation-resource-providers-aps/aws-aps-rulegroupsnamespace",
         "protocolVersion": "2.0.0",
-        "pluginVersion": "2.0.0"
+        "pluginVersion": "2.0.4"
     }
 }

@@ -1,5 +1,12 @@
 {
-  "Workspace": "{{AlertManagerDefinitionTestWorkspaceArn}}",
-  "Name": "CustomerObsession",
-  "Data": "groups:\n  - name: example\n    interval: 5m\n    rules:\n    - alert: foo\n      expr: job:request_latency_seconds:mean5m{job=\"myjob\"} > 0.5\n      for: 10m\n      labels:\n        severity: page\n      annotations:\n        summary: High request latency\n"
+    "Workspace": "{{AlertManagerDefinitionTestWorkspaceArn}}",
+    "Name": "CustomerObsession",
+    "Data": "groups:\n  - name: example\n    interval: 5m\n    rules:\n    - alert: foo\n      expr: job:request_latency_seconds:mean5m{job=\"myjob\"} > 0.5\n      for: 10m\n      labels:\n        severity: page\n      annotations:\n        summary: High request latency\n",
+    "Tags": [
+        {
+            "Key": "FavoriteDrink",
+            "Value": "Latte"
+        }
+    ]
 }
+

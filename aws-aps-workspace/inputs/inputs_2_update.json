@@ -1,4 +1,10 @@
 {
   "Alias": "SpaceMonkey",
-  "AlertManagerDefinition": "alertmanager_config: |\n  templates:\n    - 'default_template'\n  route:\n    receiver: cheese-sns\n  receivers:\n    - name: cheese-sns\n      sns_configs:\n      - topic_arn: {{AlertManagerTestSNSExport}}"
+  "AlertManagerDefinition": "alertmanager_config: |\n  templates:\n    - 'default_template'\n  route:\n    receiver: cheese-sns\n  receivers:\n    - name: cheese-sns\n      sns_configs:\n      - topic_arn: {{AlertManagerTestSNSExport}}",
+  "Tags": [
+    {
+      "Key": "FavoriteDrink",
+      "Value": "Cappuccino"
+    }
+  ]
 }
